@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>玄好物 · 现场上传</title>
+  <meta name="description" content="玄好物品牌活动 · 现场上传合影领取礼品" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <style>
+    :root{--fg:#0b1220;--muted:#52525b;--brand:#0ea5e9;--bg:#f7f7f8;--card:#ffffff}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{min-height:100svh;display:grid;place-items:center;padding:24px}
+    .card{max-width:640px;width:100%;background:var(--card);border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    .logo{display:block;margin:8px auto 16px;max-width:120px;height:auto}
+    h1{margin:4px 0 8px;font-size:22px;color:var(--fg);text-align:center}
+    p{margin:0 0 14px;line-height:1.7;color:#333}
+    .hint{color:var(--muted);font-size:13px}
+    .btn{appearance:none;border:0;border-radius:12px;background:var(--brand);color:#fff;font-weight:700;
+         padding:14px 18px;display:inline-flex;gap:8px;align-items:center;justify-content:center;text-decoration:none}
+    .btn:active{transform:translateY(1px)}
+    .cta{display:flex;align-items:center;justify-content:center;margin:18px 0 8px}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .tips{background:#f2f8ff;border:1px dashed rgba(14,165,233,.35);border-radius:12px;padding:12px}
+    code{background:#f6f6f6;border-radius:8px;padding:2px 6px}
+    .footer{margin-top:8px;text-align:center;font-size:12px;color:var(--muted)}
+    .row{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+    .badge{background:#eef2ff;color:#3730a3;border-radius:999px;padding:6px 10px;font-size:12px}
+    .serial{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-weight:700}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card" role="main">
+      <img class="logo" src="logo.png" alt="玄好物 logo" />
+      <h1>请上传一张「您与玄好物 logo」的合影</h1>
+      <p style="text-align:center" class="hint">清晰可见 <strong>玄好物 logo</strong> 即可。提交成功后向工作人员出示成功页或编号领取礼品。</p>
+
+      <div class="cta">
+        <a id="go" class="btn" href="#" rel="nofollow">📷 开始上传</a>
+      </div>
+
+      <div class="grid">
+        <div class="tips">
+          <p><strong>现场规则：</strong></p>
+          <p>1）必须本人与 <strong>玄好物 logo</strong> 同框；2）每个手机号/编号限兑一次；3）照片仅作本次活动兑奖与留存，活动结束后按规定处理。</p>
+        </div>
+        <p class="hint">若无法打开上传页，请使用会场二维码或备用短链进入。</p>
+        <div class="row">
+          <span class="badge">来源：<span id="source">nfc</span></span>
+          <span class="badge">本次领取编号：<span class="serial" id="serial">—</span></span>
+        </div>
+      </div>
+      <p class="footer">© 玄好物 · 活动页面</p>
+    </main>
+  </div>
+
+  <script>
+    const FORM_URL = "https://send2me.cn/r7r4zkM7/TEmATft0yV5ouA";
+    const usp = new URLSearchParams(location.search);
+    const source = (usp.get('from') || 'nfc').toLowerCase();
+    document.getElementById('source').textContent = source;
+
+    function genCode(){
+      const d = new Date();
+      const pad = n => n.toString().padStart(2,'0');
+      const t = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}`;
+      const rnd = Math.random().toString(36).slice(-4).toUpperCase();
+      return `${t}-${rnd}`;
+    }
+    const code = genCode();
+    document.getElementById('serial').textContent = code;
+
+    document.getElementById('go').addEventListener('click', (e) => {
+      e.preventDefault();
+      const url = new URL(FORM_URL);
+      url.searchParams.set('code', code);
+      url.searchParams.set('source', source);
+      location.href = url.toString();
+    });
+  </script>
+</body>
+</html>
